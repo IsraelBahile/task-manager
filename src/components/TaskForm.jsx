@@ -6,8 +6,7 @@ import { PlusIcon } from '@heroicons/react/24/outline';
 export default function TaskForm({ addTask, editTask, taskToEdit }) {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('Personal');
-  const [dueDate, setDueDate] = useState('');
-  const [dueTime, setDueTime] = useState('');
+  const [dueDateTime, setDueDateTime] = useState('');
   const [alarmAudio, setAlarmAudio] = useState(null);
   const isEditing = !!taskToEdit;
 
@@ -15,14 +14,12 @@ export default function TaskForm({ addTask, editTask, taskToEdit }) {
     if (taskToEdit) {
       setTitle(taskToEdit.title);
       setCategory(taskToEdit.category);
-      setDueDate(taskToEdit.dueDate || '');
-      setDueTime(taskToEdit.dueTime || '');
+      setDueDateTime(taskToEdit.dueDateTime || '');
       setAlarmAudio(taskToEdit.alarmAudio || null);
     } else {
       setTitle('');
       setCategory('Personal');
-      setDueDate('');
-      setDueTime('');
+      setDueDateTime('');
       setAlarmAudio(null);
     }
   }, [taskToEdit]);
@@ -30,7 +27,7 @@ export default function TaskForm({ addTask, editTask, taskToEdit }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!title.trim()) {
-      toast.error('Task title is required!', { autoClose: 2000 });
+      toast.error('Task title is required!', { autoClose: 1000 });
       return;
     }
 
@@ -38,8 +35,7 @@ export default function TaskForm({ addTask, editTask, taskToEdit }) {
       id: isEditing ? taskToEdit.id : uuidv4(),
       title,
       category,
-      dueDate: dueDate || undefined,
-      dueTime: dueTime || undefined,
+      dueDateTime: dueDateTime || undefined,
       alarmAudio,
       completed: isEditing ? taskToEdit.completed : false,
       createdAt: isEditing ? taskToEdit.createdAt : new Date().toISOString(),
@@ -47,25 +43,24 @@ export default function TaskForm({ addTask, editTask, taskToEdit }) {
 
     if (isEditing) {
       editTask(task);
-      toast.success('Task updated successfully!', { autoClose: 2000 });
+      toast.success('Task updated successfully!', { autoClose: 1000 });
     } else {
       addTask(task);
-      toast.success('Task added successfully!', { autoClose: 2000 });
+      toast.success('Task added successfully!', { autoClose: 1000 });
     }
 
     setTitle('');
     setCategory('Personal');
-    setDueDate('');
-    setDueTime('');
+    setDueDateTime('');
     setAlarmAudio(null);
   };
 
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().slice(0, 16);
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="mb-6 p-4 bg-white dark:bg-gray-700 rounded shadow animate-fade-in"
+      className="mb-6 p-6 card animate-fade-in"
     >
       <div className="mb-4">
         <label
@@ -79,7 +74,7 @@ export default function TaskForm({ addTask, editTask, taskToEdit }) {
           id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="mt-1 p-2 w-full border rounded dark:bg-gray-600 dark:text-white dark:border-gray-500"
+          className="mt-1 p-3 w-full border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
           placeholder="Enter task title"
         />
       </div>
@@ -94,7 +89,7 @@ export default function TaskForm({ addTask, editTask, taskToEdit }) {
           id="category"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="mt-1 p-2 w-full border rounded dark:bg-gray-600 dark:text-white dark:border-gray-500"
+          className="mt-1 p-3 w-full border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
         >
           <option value="Personal">Personal</option>
           <option value="Work">Work</option>
@@ -103,33 +98,18 @@ export default function TaskForm({ addTask, editTask, taskToEdit }) {
       </div>
       <div className="mb-4">
         <label
-          htmlFor="dueDate"
+          htmlFor="dueDateTime"
           className="block text-sm font-medium text-gray-700 dark:text-gray-300"
         >
-          Due Date (Optional)
+          Due Date & Time (Optional)
         </label>
         <input
-          type="date"
-          id="dueDate"
-          value={dueDate}
-          onChange={(e) => setDueDate(e.target.value)}
+          type="datetime-local"
+          id="dueDateTime"
+          value={dueDateTime}
+          onChange={(e) => setDueDateTime(e.target.value)}
           min={today}
-          className="mt-1 p-2 w-full border rounded dark:bg-gray-600 dark:text-white dark:border-gray-500"
-        />
-      </div>
-      <div className="mb-4">
-        <label
-          htmlFor="dueTime"
-          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-        >
-          Due Time (Optional)
-        </label>
-        <input
-          type="time"
-          id="dueTime"
-          value={dueTime}
-          onChange={(e) => setDueTime(e.target.value)}
-          className="mt-1 p-2 w-full border rounded dark:bg-gray-600 dark:text-white dark:border-gray-500"
+          className="mt-1 p-3 w-full border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
         />
       </div>
       <div className="mb-4">
@@ -150,33 +130,33 @@ export default function TaskForm({ addTask, editTask, taskToEdit }) {
               setAlarmAudio(url);
             }
           }}
-          className="mt-1 p-2 w-full border rounded dark:bg-gray-600 dark:text-white dark:border-gray-500"
+          className="mt-1 p-3 w-full border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600"
         />
       </div>
-      <button
-        type="submit"
-        className="tooltip flex items-center space-x-1 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors duration-200"
-        data-tooltip={isEditing ? 'Update Task' : 'Add Task'}
-      >
-        <PlusIcon className="h-5 w-5" />
-        <span>{isEditing ? 'Update Task' : 'Add Task'}</span>
-      </button>
-      {isEditing && (
+      <div className="flex space-x-3">
         <button
-          type="button"
-          onClick={() => {
-            setTitle('');
-            setCategory('Personal');
-            setDueDate('');
-            setDueTime('');
-            setAlarmAudio(null);
-            editTask(null);
-          }}
-          className="ml-2 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors duration-200"
+          type="submit"
+          className="tooltip bg-blue-600 text-white p-3 rounded-md hover:bg-blue-700"
+          data-tooltip={isEditing ? 'Update Task' : 'Add Task'}
         >
-          Cancel
+          <PlusIcon className="h-5 w-5" />
         </button>
-      )}
+        {isEditing && (
+          <button
+            type="button"
+            onClick={() => {
+              setTitle('');
+              setCategory('Personal');
+              setDueDateTime('');
+              setAlarmAudio(null);
+              editTask(null);
+            }}
+            className="bg-gray-500 text-white p-3 rounded-md hover:bg-gray-600"
+          >
+            Cancel
+          </button>
+        )}
+      </div>
     </form>
   );
 }

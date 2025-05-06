@@ -3,12 +3,14 @@
 @tailwind utilities;
 
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  background: linear-gradient(to bottom, #edf2f7, #e2e8f0);
 }
 
-.dark {
-  background-color: #1f2937;
-  color: #f3f4f6;
+.dark body {
+  background: linear-gradient(to bottom, #2d3748, #1a202c);
+  color: #e2e8f0;
 }
 
 @keyframes fadeIn {
@@ -36,13 +38,14 @@ body {
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #333;
+  background-color: #1a202c;
   color: #fff;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 6px 12px;
+  border-radius: 6px;
   font-size: 12px;
   white-space: nowrap;
-  z-index: 10;
+  z-index: 50;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .itm-circle {
@@ -51,8 +54,94 @@ body {
   justify-content: center;
   width: 40px;
   height: 40px;
-  background-color: #2563eb;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
   color: #fff;
   border-radius: 50%;
-  font-weight: bold;
+  font-size: 16px;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar {
+  transition: transform 0.3s ease-in-out;
+  background: #ffffff;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.dark .sidebar {
+  background: #2d3748;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-hidden {
+  transform: translateX(-100%);
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.dark .card {
+  background: #374151;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+input, select, button {
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+.navbar {
+  background: linear-gradient(90deg, #3b82f6, #2563eb);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dark .navbar {
+  background: linear-gradient(90deg, #1e3a8a, #1e40af);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.dark .modal-content {
+  background: #374151;
+  color: #e2e8f0;
 }
