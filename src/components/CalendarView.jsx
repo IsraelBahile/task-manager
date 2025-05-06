@@ -31,7 +31,7 @@ export default function CalendarView() {
   const events = tasks
     .filter((task) => task.dueDate)
     .map((task) => ({
-      title: task.title,
+      title: `${task.title}${task.dueTime ? ` at ${task.dueTime}` : ''}`,
       date: task.dueDate,
       extendedProps: { category: task.category, completed: task.completed },
     }));
@@ -43,9 +43,9 @@ export default function CalendarView() {
     );
     setSelectedDateTasks(dateTasks);
     if (dateTasks.length > 0) {
-      toast.info(`Tasks for ${clickedDate}: ${dateTasks.length}`);
+      toast.info(`Tasks for ${clickedDate}: ${dateTasks.length}`, { autoClose: 2000 });
     } else {
-      toast.info(`No tasks for ${clickedDate}`);
+      toast.info(`No tasks for ${clickedDate}`, { autoClose: 2000 });
     }
   };
 
@@ -68,6 +68,9 @@ export default function CalendarView() {
           right: 'dayGridMonth,dayGridWeek',
         }}
         className="dark:bg-gray-800 dark:text-gray-200"
+        validRange={{
+          start: new Date().toISOString().split('T')[0],
+        }}
       />
       {selectedDateTasks.length > 0 && (
         <div className="mt-4">
@@ -84,7 +87,7 @@ export default function CalendarView() {
                     : 'text-gray-800 dark:text-gray-200'
                 }
               >
-                {task.title} ({task.category})
+                {task.title} ({task.category}) {task.dueTime && `at ${task.dueTime}`}
               </li>
             ))}
           </ul>
