@@ -1,6 +1,9 @@
-import { HomeIcon, PuzzlePieceIcon, InformationCircleIcon, EnvelopeIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { HomeIcon, PuzzlePieceIcon, InformationCircleIcon, EnvelopeIcon, XMarkIcon, BookOpenIcon } from '@heroicons/react/24/outline';
+import { useLanguage } from '../LanguageContext.jsx';
 
 export default function Sidebar({ isOpen, toggleSidebar, setCurrentView }) {
+  const { t } = useLanguage();
+
   return (
     <div
       className={`fixed inset-y-0 left-0 w-64 sidebar text-gray-800 dark:text-white p-4 flex flex-col justify-between z-50 ${
@@ -23,17 +26,27 @@ export default function Sidebar({ isOpen, toggleSidebar, setCurrentView }) {
             className="flex items-center space-x-2 w-full text-left p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
           >
             <HomeIcon className="h-5 w-5" />
-            <span>Home</span>
+            <span>{t('home')}</span>
+          </button>
+          <button
+            onClick={() => {
+              setCurrentView('manual');
+              toggleSidebar();
+            }}
+            className="flex items-center space-x-2 w-full text-left p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+          >
+            <BookOpenIcon className="h-5 w-5" />
+            <span>{t('manual')}</span>
           </button>
           <button
             onClick={() => {
               setCurrentView('other-apps');
               toggleSidebar();
             }}
-            className="flex items-center space-x-2 w-full text-left p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+            className="flex items-center space-x-2 w-full text-left p-2 hover:bg-grey-100 dark:hover:bg-gray-700 rounded"
           >
             <PuzzlePieceIcon className="h-5 w-5" />
-            <span>Other Apps to Try</span>
+            <span>{t('otherApps')}</span>
           </button>
           <button
             onClick={() => {
@@ -43,7 +56,7 @@ export default function Sidebar({ isOpen, toggleSidebar, setCurrentView }) {
             className="flex items-center space-x-2 w-full text-left p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
           >
             <InformationCircleIcon className="h-5 w-5" />
-            <span>About</span>
+            <span>{t('about')}</span>
           </button>
           <button
             onClick={() => {
@@ -53,7 +66,7 @@ export default function Sidebar({ isOpen, toggleSidebar, setCurrentView }) {
             className="flex items-center space-x-2 w-full text-left p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
           >
             <EnvelopeIcon className="h-5 w-5" />
-            <span>Contact</span>
+            <span>{t('contact')}</span>
           </button>
         </nav>
       </div>

@@ -3,8 +3,10 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { toast } from 'react-toastify';
+import { useLanguage } from '../LanguageContext.jsx';
 
 export default function CalendarView() {
+  const { t } = useLanguage();
   const [tasks, setTasks] = useState(() => {
     const savedTasks = localStorage.getItem('tasks');
     return savedTasks ? JSON.parse(savedTasks) : [];
@@ -53,7 +55,7 @@ export default function CalendarView() {
     <div className="p-6 container">
       <div className="card">
         <h2 className="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200">
-          Task Calendar
+          {t('taskCalendar')}
         </h2>
         <FullCalendar
           plugins={[dayGridPlugin, interactionPlugin]}

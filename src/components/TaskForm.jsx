@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'react-toastify';
 import { PlusIcon } from '@heroicons/react/24/outline';
+import { useLanguage } from '../LanguageContext.jsx';
 
 export default function TaskForm({ addTask, editTask, taskToEdit }) {
+  const { t } = useLanguage();
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('Personal');
   const [dueDateTime, setDueDateTime] = useState('');
@@ -27,7 +29,7 @@ export default function TaskForm({ addTask, editTask, taskToEdit }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!title.trim()) {
-      toast.error('Task title is required!', { autoClose: 1000 });
+      toast.error(t('titleRequired'), { autoClose: 1000 });
       return;
     }
 
@@ -43,10 +45,8 @@ export default function TaskForm({ addTask, editTask, taskToEdit }) {
 
     if (isEditing) {
       editTask(task);
-      toast.success('Task updated successfully!', { autoClose: 1000 });
     } else {
       addTask(task);
-      toast.success('Task added successfully!', { autoClose: 1000 });
     }
 
     setTitle('');
@@ -67,7 +67,7 @@ export default function TaskForm({ addTask, editTask, taskToEdit }) {
           htmlFor="title"
           className="block text-sm font-medium text-gray-700 dark:text-gray-300"
         >
-          Task Title
+          {t('taskTitle')}
         </label>
         <input
           type="text"
@@ -75,7 +75,7 @@ export default function TaskForm({ addTask, editTask, taskToEdit }) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           className="mt-1 p-3 w-full border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
-          placeholder="Enter task title"
+          placeholder={t('enterTaskTitle')}
         />
       </div>
       <div className="mb-4">
@@ -83,7 +83,7 @@ export default function TaskForm({ addTask, editTask, taskToEdit }) {
           htmlFor="category"
           className="block text-sm font-medium text-gray-700 dark:text-gray-300"
         >
-          Category
+          {t('category')}
         </label>
         <select
           id="category"
@@ -91,9 +91,9 @@ export default function TaskForm({ addTask, editTask, taskToEdit }) {
           onChange={(e) => setCategory(e.target.value)}
           className="mt-1 p-3 w-full border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
         >
-          <option value="Personal">Personal</option>
-          <option value="Work">Work</option>
-          <option value="Other">Other</option>
+          <option value="Personal">{t('personal')}</option>
+          <option value="Work">{t('work')}</option>
+          <option value="Other">{t('other')}</option>
         </select>
       </div>
       <div className="mb-4">
@@ -101,7 +101,7 @@ export default function TaskForm({ addTask, editTask, taskToEdit }) {
           htmlFor="dueDateTime"
           className="block text-sm font-medium text-gray-700 dark:text-gray-300"
         >
-          Due Date & Time (Optional)
+          {t('dueDateTime')}
         </label>
         <input
           type="datetime-local"
@@ -117,7 +117,7 @@ export default function TaskForm({ addTask, editTask, taskToEdit }) {
           htmlFor="alarmAudio"
           className="block text-sm font-medium text-gray-700 dark:text-gray-300"
         >
-          Alarm Audio (Optional)
+          {t('alarmAudio')}
         </label>
         <input
           type="file"
@@ -137,7 +137,7 @@ export default function TaskForm({ addTask, editTask, taskToEdit }) {
         <button
           type="submit"
           className="tooltip bg-blue-600 text-white p-3 rounded-md hover:bg-blue-700"
-          data-tooltip={isEditing ? 'Update Task' : 'Add Task'}
+          data-tooltip={isEditing ? t('updateTask') : t('addTask')}
         >
           <PlusIcon className="h-5 w-5" />
         </button>
@@ -153,7 +153,7 @@ export default function TaskForm({ addTask, editTask, taskToEdit }) {
             }}
             className="bg-gray-500 text-white p-3 rounded-md hover:bg-gray-600"
           >
-            Cancel
+            {t('cancel')}
           </button>
         )}
       </div>

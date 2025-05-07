@@ -3,8 +3,10 @@ import TaskForm from './TaskForm.jsx';
 import ConfirmModal from './ConfirmModal.jsx';
 import { toast } from 'react-toastify';
 import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { useLanguage } from '../LanguageContext.jsx';
 
 export default function TaskList() {
+  const { t } = useLanguage();
   const [tasks, setTasks] = useState(() => {
     const savedTasks = localStorage.getItem('tasks');
     return savedTasks ? JSON.parse(savedTasks) : [];
@@ -57,7 +59,7 @@ export default function TaskList() {
 
   const addTask = (newTask) => {
     setTasks([...tasks, newTask]);
-    toast.success('Task added successfully!', { autoClose: 1000 });
+    toast.success(t('taskAdded'), { autoClose: 1000 });
   };
 
   const editTask = (updatedTask) => {
@@ -71,34 +73,40 @@ export default function TaskList() {
       )
     );
     setTaskToEdit(null);
-    toast.success('Task updated successfully!', { autoClose: 1000 });
+    toast.success(t('taskUpdated'), { autoClose: 1000 });
   };
 
   const toggleComplete = (taskId) => {
     setTasks(
       tasks.map((task) =>
-        task.id === taskId ? { ...task, completed: !task.completed } : task
+        task.id === taskId
+          ? { ...task, completed: !task.completed }
+          : task
       )
     );
-    toast.info('Task updated!', { autoClose: 1000 });
+    const task = tasks.find((t) => t.id === taskId);
+    toast.info(
+      task && !task.completed ? t('taskCompleted') : t('taskUpdated'),
+      { autoClose: 1000 }
+    );
   };
 
   const deleteTask = (taskId) => {
-    setConfirmMessage('Are you sure you want to delete this task?');
+    setConfirmMessage(t('deleteConfirm'));
     setConfirmAction(() => () => {
       setTasks(tasks.filter((task) => task.id !== taskId));
       setTaskToEdit(null);
-      toast.success('Task deleted!', { autoClose: 1000 });
+      toast.success(t('taskDeleted'), { autoClose: 1000 });
     });
     setShowConfirmModal(true);
   };
 
   const clearAllTasks = () => {
-    setConfirmMessage('Are you sure you want to clear all tasks?');
+    setConfirmMessage(t('clearConfirm'));
     setConfirmAction(() => () => {
       setTasks([]);
       setTaskToEdit(null);
-      toast.success('All tasks cleared!', { autoClose: 1000 });
+      toast.success(t('tasksCleared'), { autoClose: 1000 });
     });
     setShowConfirmModal(true);
   };
@@ -141,12 +149,12 @@ export default function TaskList() {
         <div className="mt-6">
           <div className="flex flex-col sm:flex-row justify-between items-center mb-6 space-y-4 sm:space-y-0">
             <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
-              Tasks
+              {t('tasks')}
             </h2>
             <div className="flex flex-wrap gap-3">
               <input
                 type="text"
-                placeholder="Search tasks..."
+                placeholder={t('searchTasks')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="p-2 border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
@@ -156,30 +164,30 @@ export default function TaskList() {
                 onChange={(e) => setFilterCategory(e.target.value)}
                 className="p-2 border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
               >
-                <option value="All">All Categories</option>
-                <option value="Personal">Personal</option>
-                <option value="Work">Work</option>
-                <option value="Other">Other</option>
+                <option value="All">{t('allCategories')}</option>
+                <option value="Personal">{t('personal')}</option>
+                <option value="Work">{t('work')}</option>
+                <option value="Other">{t('other')}</option>
               </select>
               <select
                 value={filterSort}
                 onChange={(e) => setFilterSort(e.target.value)}
                 className="p-2 border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
               >
-                <option value="default">Default Sort</option>
-                <option value="alphabet">Alphabetical</option>
-                <option value="time">By Due Time</option>
+                <option value="default">{t('defaultSort')}</option>
+                <option value="alphabet">{t('alphabetical')}</option>
+                <option value="time">{t('byDueTime')}</option>
               </select>
               <button
                 onClick={clearAllTasks}
                 className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
               >
-                Clear All
+                {t('clearAll')}
               </button>
             </div>
           </div>
           {filteredTasks.length === 0 ? (
-            <p className="text-gray-600 dark:text-gray-400">No tasks found.</p>
+            <p className="text-gray-600 dark:text-gray-400">{t('noTasks')}</p>
           ) : (
             <ul className="space-y-3">
               {filteredTasks.map((task) => (
@@ -215,14 +223,14 @@ export default function TaskList() {
                     <button
                       onClick={() => setTaskToEdit(task)}
                       className="tooltip text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
-                      data-tooltip="Edit Task"
+                      data-tooltip={t('editTask')}
                     >
                       <PencilIcon className="h-5 w-5" />
                     </button>
                     <button
                       onClick={() => deleteTask(task.id)}
                       className="tooltip text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
-                      data-tooltip="Delete Task"
+                      data-tooltip={t('deleteTask')}
                     >
                       <TrashIcon className="h-5 w-5" />
                     </button>
